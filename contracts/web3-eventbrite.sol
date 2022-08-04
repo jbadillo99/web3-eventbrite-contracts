@@ -14,4 +14,7 @@ contract Web3EventBrite {
         address[] claimedRSVPs;
         bool paidOut;
     }
+
+    // Use a dictionary to map event Id to an event struct
+    mapping(bytes32 => CreateEvent) public idToEvent;
 }
