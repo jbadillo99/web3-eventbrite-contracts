@@ -1,0 +1,23 @@
+{
+  "name": "web3-eventbrite",
+  "version": "1.0.0",
+  "description": "A web3.0 version of the Event Brite ticketing and event management website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbadillo99/web3-eventbrite.git"
+  },
+  "author": "Jesus Badillo Jr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbadillo99/web3-eventbrite/issues"
+  },
+  "homepage": "https://github.com/jbadillo99/web3-eventbrite#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "hardhat": "^2.10.1"
+  }
+}
