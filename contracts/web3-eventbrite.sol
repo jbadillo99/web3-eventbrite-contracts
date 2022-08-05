@@ -110,6 +110,7 @@ contract Web3EventBrite {
         require(myEvent.paidOut == false, "ATTENDEE HAS ALREADY PAID");
 
         // Send Eth back to the staker
+        // This is where the calls are explained: https://solidity-by-example.org/sending-ether/
         (bool sent,) = attendee.call{value: myEvent.deposit}("");
 
         if(sent == false){
@@ -117,6 +118,50 @@ contract Web3EventBrite {
         }
 
         require(sent, "FAILED TO SEND ETHER");
+    }
+
+    function confirmAllAttendess(bytes32 eventId) external {
+
+        // The memory keyword is used as temporary memory within the method
+        CreateEvent memory myEvent = idToEvent[eventId];
+
+        // Require that the msg.sender is the owner of the event
+        require(msg.sender == myEvent.eventOwner,"NOT AUTHORIZED");
+
+        // Iterate through confirmedRSVPs to confirm all attendees
+        for(uint8 i = 0; i < myEvent.confirmedRSVPs.length; i++){
+            confirmAttendee(eventId, myEvent.confirmedRSVPs[i]);
+        }
+    }
+
+    function withdrawUnclaimedDeposits(bytes32 eventId) external {
+        
+        // Get event from mapping usinfg 
+        CreateEvent memory myEvent = idToEvent[eventId];
+
+        // Require that the deposits has not been paid out yet
+        require(!myEvent.paidOut,"ALREADY PAID OUT");
+
+        // Require that it has been over a week from the event date
+        require(myEvent.eventTimestamp <= (block.timestamp + 7 days), "HAS NOT PASSED 7 DAYS SINCE EVENT");
+
+        // Require that the owner of the contract is executing this method
+        require(msg.sender == myEvent.eventOwner,"NOT AUTHORIZED");
+
+        // Calculate unclaimed funds to send back Eth to users who did not go to the event
+        uint256 payoutFunds = (myEvent.confirmedRSVPs.length - myEvent.claimedRSVPs.length)*myEvent.deposit;
+
+        // Set event to paid out before sending to avoid reentrancy attacks
+        myEvent.paidOut = true;
+
+
+        (bool sent,) = msg.sender.call{value: payoutFunds}("");
+
+        if(!sent){
+            myEvent.paidOut == false;
+        }
+
+        require(sent == true,"FAILED TO SEND ETHER");
     }
 
 }
