@@ -3,6 +3,22 @@ pragma solidity ^0.8.4;
 
 contract Web3EventBrite {
 
+    // Create events
+    event NewEventCreated(
+        bytes32 eventId,
+        address creatorAddress,
+        uint256 eventTimestamp,
+        uint256 maxCapacity,
+        uint256 deposit,
+        string eventDataCID
+    );
+
+    event NewRSVP(bytes32 eventID, address attendeeAddress);
+
+    event ConfirmedAttendee(bytes32 eventID, address attendeeAddress);
+
+    event DepositsPaidOut(bytes32 eventID);
+
     // The CreateEvent struct provides a struct of with specific event attributes
     struct CreateEvent {
         bytes32 eventId;
@@ -57,7 +73,17 @@ contract Web3EventBrite {
             confirmedRSVPs,
             claimedRSVPs,
             false
-        ); 
+        );
+
+        // Expose the data from the createNewEvent function
+        emit NewEventCreated(
+            eventId,
+            msg.sender,
+            eventTimestamp,
+            maxCapacity,
+            deposit,
+            eventDataCID
+        );
     }
 
     function createNewRSVP(bytes32 eventId) external payable {
@@ -80,6 +106,8 @@ contract Web3EventBrite {
         }
         
         myEvent.confirmedRSVPs.push(payable(msg.sender));
+
+        emit NewRSVP(eventId,msg.sender);
     }
 
     function confirmAttendee(bytes32 eventId, address attendee) public {
@@ -118,6 +146,8 @@ contract Web3EventBrite {
         }
 
         require(sent, "FAILED TO SEND ETHER");
+
+        emit ConfirmedAttendee(eventId, attendee);
     }
 
     function confirmAllAttendess(bytes32 eventId) external {
@@ -162,6 +192,8 @@ contract Web3EventBrite {
         }
 
         require(sent == true,"FAILED TO SEND ETHER");
+
+        emit DepositsPaidOut(eventId);
     }
 
 }
