@@ -4,6 +4,7 @@
   "description": "A web3.0 version of the Event Brite ticketing and event management website",
   "main": "index.js",
   "scripts": {
+    "script": "node scripts/run.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
