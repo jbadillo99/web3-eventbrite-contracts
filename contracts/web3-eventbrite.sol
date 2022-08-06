@@ -5,7 +5,7 @@ contract Web3EventBrite {
 
     // Create events
     event NewEventCreated(
-        bytes32 eventId,
+        bytes32 eventID,
         address creatorAddress,
         uint256 eventTimestamp,
         uint256 maxCapacity,
@@ -130,7 +130,7 @@ contract Web3EventBrite {
         require(rsvpConfirmation == attendee, "ATTENDEE NOT IN RSVP LIST");
 
         // Require that attendee has not already checked in
-        for(uint8 i = 0; i < myEvent.confirmedRSVPs.length; i++) {
+        for(uint8 i = 0; i < myEvent.claimedRSVPs.length; i++) {
             require(attendee != myEvent.claimedRSVPs[i], "ATTENDEE HAS ALREADY CONFIRMED");
         }
 
@@ -150,7 +150,7 @@ contract Web3EventBrite {
         emit ConfirmedAttendee(eventId, attendee);
     }
 
-    function confirmAllAttendess(bytes32 eventId) external {
+    function confirmAllAttendees(bytes32 eventId) external {
 
         // The memory keyword is used as temporary memory within the method
         CreateEvent memory myEvent = idToEvent[eventId];
@@ -191,7 +191,7 @@ contract Web3EventBrite {
             myEvent.paidOut == false;
         }
 
-        require(sent == true,"FAILED TO SEND ETHER");
+        require(sent,"FAILED TO SEND ETHER");
 
         emit DepositsPaidOut(eventId);
     }
