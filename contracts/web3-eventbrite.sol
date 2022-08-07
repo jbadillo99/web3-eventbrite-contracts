@@ -145,7 +145,7 @@ contract Web3EventBrite {
             myEvent.claimedRSVPs.pop();
         }
 
-        require(sent, "FAILED TO SEND ETHER");
+        require(sent, "FAILED TO SEND ETHER: IN CONFIRMATION");
 
         emit ConfirmedAttendee(eventId, attendee);
     }
@@ -191,7 +191,7 @@ contract Web3EventBrite {
             myEvent.paidOut == false;
         }
 
-        require(sent,"FAILED TO SEND ETHER");
+        require(sent,"FAILED TO SEND ETHER: IN WITHDRAW");
 
         emit DepositsPaidOut(eventId);
     }
